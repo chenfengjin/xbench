@@ -60,7 +60,13 @@ func (t *shortContent) Invoke(from *account.Account, name, method string, args m
 		"title": fmt.Sprintf("title_%d_%s", t.length, lib.RandBytes(16)),
 		"content": string(lib.RandBytes(t.length)),
 	}
-	return t.client.InvokeWasmContract(from, name, method, args, opts...)
+	req,err:=xuper.NewInvokeContractRequest(from,"wasm",name,method,args,opts...)
+	if err!=nil{
+		return nil,err
+	}
+	return t.client.GenerateTx(req)
+	// TODO
+	// return t.client.InvokeWasmContract(from, name, method, args, opts...)
 }
 
 func (t *shortContent) Query(from *account.Account, name, method string, args map[string]string, opts ...xuper.RequestOption) (*xuper.Transaction, error) {

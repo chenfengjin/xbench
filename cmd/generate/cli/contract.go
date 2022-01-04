@@ -99,7 +99,7 @@ func (t *ContractCommand) spawn(wg *sync.WaitGroup, child int) error {
 
 func (t *ContractCommand) generate(ctx context.Context) error {
 	config := &cases.Config{
-		Host:        "127.0.0.1:37101",
+		Host:        t.host,
 		Total:       t.total,
 		Concurrency: t.concurrency,
 		Args: map[string]string{

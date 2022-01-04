@@ -88,11 +88,11 @@ func (t *contract) Init() error {
 		log.Printf("account already exists, account=%s", t.config.ContractAccount)
 	}
 
-	// 转账给合约账户
-	_, err = t.client.Transfer(lib.Bank, contractAccount, t.amount)
-	if err != nil {
-		return fmt.Errorf("transfer to contract account error: %v, contractAccount=%s", err, contractAccount)
-	}
+	// // 转账给合约账户
+	// _, err = t.client.Transfer(lib.Bank, contractAccount, t.amount)
+	// if err != nil {
+	// 	return fmt.Errorf("transfer to contract account error: %v, contractAccount=%s", err, contractAccount)
+	// }
 
 	// 部署合约
 	bank := lib.Bank
@@ -116,11 +116,11 @@ func (t *contract) Init() error {
 	// 等待部署合约完成
 	time.Sleep(time.Duration(t.waitDeploy)*time.Second)
 
-	// 转账给调用合约的账户
-	_, err = lib.InitTransfer(t.client, lib.Bank, t.accounts, t.amount, t.split)
-	if err != nil {
-		return fmt.Errorf("contract to test accounts error: %v", err)
-	}
+	// // 转账给调用合约的账户
+	// _, err = lib.InitTransfer(t.client, lib.Bank, t.accounts, t.amount, t.split)
+	// if err != nil {
+	// 	return fmt.Errorf("contract to test accounts error: %v", err)
+	// }
 
 	log.Printf("init done")
 	return nil

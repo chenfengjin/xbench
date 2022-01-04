@@ -14,6 +14,7 @@ import (
 
 // 银行账户
 var Bank *account.Account
+
 //var Bank = &account.Account{
 //	Address: `dw3RjnTe47G4u6a6hHWCfEhtaDkgdYWTE`,
 //	PublicKey: `{"Curvname":"P-256","X":71150494877248293798614437171152372361228736891836815976675168211334131079261,"Y":93501855315423594331057555514461624511800705618893328391445695924964114158010}`,
@@ -30,9 +31,13 @@ func init() {
 }
 
 func LoadBankAK() (*account.Account, error) {
-	dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
+	dir, err := os.Getwd()
+	if err != nil {
+		return nil, err
+	}
+
 	path := filepath.Join(dir, "../data/bank")
-	var addr, err = ioutil.ReadFile(filepath.Join(path, "address"))
+	addr, err := ioutil.ReadFile(filepath.Join(path, "address"))
 	if err != nil {
 		return nil, fmt.Errorf("read address error: %v", err)
 	}
@@ -48,8 +53,8 @@ func LoadBankAK() (*account.Account, error) {
 	}
 
 	addInfo := &account.Account{
-		Address: string(addr),
-		PublicKey: string(pubKey),
+		Address:    string(addr),
+		PublicKey:  string(pubKey),
 		PrivateKey: string(priKey),
 	}
 	return addInfo, nil
@@ -59,7 +64,11 @@ func LoadAccount(number int) ([]*account.Account, error) {
 	if number > 5000 {
 		return nil, fmt.Errorf("account not enought: %d", number)
 	}
-	dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
+
+	dir, err := os.Getwd()
+	if err != nil {
+		return nil, err
+	}
 	path := filepath.Join(dir, "../data/account/mnemonic.dat")
 	fd, err := os.Open(path)
 	if err != nil {
@@ -83,8 +92,8 @@ func LoadAccount(number int) ([]*account.Account, error) {
 }
 
 func GenerateAddress(concurrency int) {
-	dir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
-	path := filepath.Join(dir, "../data/account/mnemonic.dat")
+	dir, _ := os.Getwd()
+	path := filepath.Join(dir, "data/account/mnemonic.dat")
 	fd, err := os.Open(path)
 	if err != nil {
 		fmt.Printf("open file error: %s\n", err)
@@ -93,7 +102,7 @@ func GenerateAddress(concurrency int) {
 	scanner := bufio.NewScanner(fd)
 
 	var buffer bytes.Buffer
-	for i:=0; i<concurrency; i++ {
+	for i := 0; i < concurrency; i++ {
 		scanner.Scan()
 		ak, err := account.RetrieveAccount(scanner.Text(), 2)
 		if err != nil {

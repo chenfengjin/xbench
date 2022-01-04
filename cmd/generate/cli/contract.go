@@ -65,7 +65,7 @@ func NewContractCommand(cli *Cli) *cobra.Command {
 }
 
 func (t *ContractCommand) addFlags() {
-	t.cmd.Flags().StringVar(&t.host,"host","","127.0.0.1:37101","host to generate transaction ")
+	t.cmd.Flags().StringVar(&t.host,"host","127.0.0.1:37101","host to generate transaction ")
 	t.cmd.Flags().IntVarP(&t.total, "total", "t", 1000000, "total tx number")
 	t.cmd.Flags().IntVarP(&t.concurrency, "concurrency", "c", 20, "goroutine concurrency number")
 	t.cmd.Flags().StringVarP(&t.output, "output", "o", "./data/evidence", "generate tx output path")
